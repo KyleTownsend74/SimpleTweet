@@ -2,7 +2,7 @@
 
 **SimpleTweet** is an android app that allows a user to view his Twitter timeline. The app utilizes [Twitter REST API](https://dev.twitter.com/rest/public).
 
-Time spent: **6** hours spent in total
+Time spent: **7** hours spent in total
 
 ## User Stories
 
@@ -40,6 +40,7 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 ## Notes
 
 I initially had challenges importing the RestClientTemplate into Android Studio and getting it to build properly.
+UI tweaks I made include adding an icon on the action bar, changing the action bar color, changing font color on display name and text body, bolding display name, adding a divider between tweets, and making profile images circles.
 
 ## Open-source libraries used
 
