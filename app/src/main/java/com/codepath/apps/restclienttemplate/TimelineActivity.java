@@ -1,34 +1,34 @@
 package com.codepath.apps.restclienttemplate;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.menu.MenuView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
-import android.widget.Toast;
+import android.view.View;
 
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.apps.restclienttemplate.models.TweetDao;
 import com.codepath.apps.restclienttemplate.models.TweetWithUser;
 import com.codepath.apps.restclienttemplate.models.User;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
-import com.github.scribejava.apis.TwitterApi;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.parceler.Parcels;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,18 +39,23 @@ public class TimelineActivity extends AppCompatActivity {
     public static final String TAG = "TimelineActivity";
     private final int REQUEST_CODE = 20;
 
+    Context context;
     TweetDao tweetDao;
     TwitterClient client;
     RecyclerView rvTweets;
     List<Tweet> tweets;
     TweetsAdapter adapter;
+    FloatingActionButton fabCompose;
     SwipeRefreshLayout swipeContainer;
     EndlessRecyclerViewScrollListener scrollListener;
+    RecyclerView.OnScrollListener secondaryScrollListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
+
+        context = this;
 
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.twitter_blue)));
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -78,6 +83,7 @@ public class TimelineActivity extends AppCompatActivity {
             }
         });
 
+        fabCompose = findViewById(R.id.fabCompose);
         // Find the recycler view
         rvTweets = findViewById(R.id.rvTweets);
         // Init the list of tweets and adapter
@@ -95,8 +101,33 @@ public class TimelineActivity extends AppCompatActivity {
                 loadMoreData();
             }
         };
+        secondaryScrollListener = new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                if(dy > 0) {
+                    //Log.i(TAG, "Hidden");
+                    fabCompose.hide();
+                }
+                else if(dy < 0) {
+                    //Log.i(TAG, "Shown");
+                    fabCompose.show();
+                }
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        };
         // Adds scroll listener to RecyclerView
         rvTweets.addOnScrollListener(scrollListener);
+        rvTweets.addOnScrollListener(secondaryScrollListener);
+
+        // Set click listener for compose button
+        fabCompose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Navigate to the compose activity
+                Intent intent = new Intent(context, ComposeActivity.class);
+                startActivityForResult(intent, REQUEST_CODE);
+            }
+        });
 
         // Query for existing tweets in the DB
         AsyncTask.execute(new Runnable() {
@@ -126,8 +157,8 @@ public class TimelineActivity extends AppCompatActivity {
         if(item.getItemId() == R.id.compose) {
             // Compose icon has been tapped
             // Navigate to the compose activity
-            Intent intent = new Intent(this, ComposeActivity.class);
-            startActivityForResult(intent, REQUEST_CODE);
+            //Intent intent = new Intent(this, ComposeActivity.class);
+            //startActivityForResult(intent, REQUEST_CODE);
             return true;
         }
 
