@@ -3,6 +3,8 @@ package com.codepath.apps.restclienttemplate;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -29,6 +31,7 @@ public class ComposeActivity extends AppCompatActivity {
     EditText etCompose;
     Button btnTweet;
     TextView tvCount;
+    int curColor;
 
     TwitterClient client;
 
@@ -42,6 +45,10 @@ public class ComposeActivity extends AppCompatActivity {
         etCompose = findViewById(R.id.etCompose);
         btnTweet = findViewById(R.id.btnTweet);
         tvCount = findViewById(R.id.tvCount);
+        curColor = tvCount.getCurrentTextColor();
+
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.twitter_blue)));
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         // Set a text listener on edit text
         etCompose.addTextChangedListener(new TextWatcher() {
@@ -54,6 +61,15 @@ public class ComposeActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 // Occurs as text is changing
                 tvCount.setText(Integer.toString(charSequence.length()) + "/" + Integer.toString(MAX_TWEET_LENGTH));
+
+                if(charSequence.length() > MAX_TWEET_LENGTH) {
+                    tvCount.setTextColor(Color.RED);
+                    btnTweet.setEnabled(false);
+                }
+                else if(charSequence.length() <= MAX_TWEET_LENGTH && tvCount.getCurrentTextColor() == Color.RED) {
+                    tvCount.setTextColor(curColor);
+                    btnTweet.setEnabled(true);
+                }
             }
 
             @Override

@@ -145,27 +145,6 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.compose) {
-            // Compose icon has been tapped
-            // Navigate to the compose activity
-            //Intent intent = new Intent(this, ComposeActivity.class);
-            //startActivityForResult(intent, REQUEST_CODE);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
             // Get data from the intent (tweet)
