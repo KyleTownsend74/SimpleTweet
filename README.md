@@ -1,6 +1,6 @@
-# SimpleTweet
+# SimpleTwitter
 
-**SimpleTweet** is an Android app that allows the user to view their real Twitter timeline and post a new tweet. The app utilizes the [Twitter REST API](https://dev.twitter.com/rest/public). Made for the CodePath Android University course (Project 2).
+**SimpleTwitter** is an Android app that allows the user to view their real Twitter timeline and post a new tweet. The app utilizes the [Twitter REST API](https://dev.twitter.com/rest/public). Made for the CodePath Android University course (Project 2).
 
 ## Features
 
